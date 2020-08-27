@@ -4,15 +4,24 @@ class Todo extends Component {
     constructor(props){
         super(props);
         this.state = {
-            edit: false
+            edit: false,
+            task: this.props.task,
+            id: this.props.id
         }
 
         this.handleRemove = this.handleRemove.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleRemove(){
         this.props.removeTodo(this.props.id);
+    }
+
+    handleUpdate(e){
+        e.preventDefault();
+        this.props.update(this.state.task,this.props.id);
     }
 
     handleEdit(){
@@ -22,13 +31,20 @@ class Todo extends Component {
         }));
     }
 
+    handleChange(e){
+       this.setState({
+           [e.target.name] : e.target.value
+       })
+    }
+
     render(){
         let result;
         if(this.state.edit) {
             result = (
                 <div>
-                <form>
-                    <input type="text" />
+                <form onSubmit={this.handleUpdate}>
+                    <input name="task" onChange={this.handleChange} value={this.state.task}  type="text" />
+                    <button className="TodoForm-button">Update</button>
                 </form>
                 </div>
             )
